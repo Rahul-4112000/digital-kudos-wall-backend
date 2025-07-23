@@ -19,3 +19,13 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Kudos {
+  id        String   @id @default(cuid())
+  category  String
+  fromUser  String   // Name of the person giving kudos
+  toUser    String   // Name of the person receiving kudos
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
