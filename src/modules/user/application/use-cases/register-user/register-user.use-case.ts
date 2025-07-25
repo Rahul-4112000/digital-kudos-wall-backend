@@ -1,12 +1,12 @@
-import { UseCase } from "../../../../../shared/core/use-case";
-import { Result } from "../../../../../shared/core/result";
-import { User } from "../../../domain/user.entity";
-import { UserRepository } from "../../../domain/user.repository";
-import { EmailService } from "../../../domain/email.service";
-import { Email } from "../../../domain/value-objects/email";
-import { Password } from "../../../domain/value-objects/password";
-import { UserAlreadyExistsError } from "../../../domain/errors/user-already-exists.error";
-import { ValidationError } from "../../../domain/errors/validation.error";
+import { UseCase } from '../../../../../shared/core/use-case';
+import { Result } from '../../../../../shared/core/result';
+import { User } from '../../../domain/user.entity';
+import { UserRepository } from '../../../domain/user.repository';
+import { EmailService } from '../../../domain/email.service';
+import { Email } from '../../../domain/value-objects/email';
+import { Password } from '../../../domain/value-objects/password';
+import { UserAlreadyExistsError } from '../../../domain/errors/user-already-exists.error';
+import { ValidationError } from '../../../domain/errors/validation.error';
 
 export interface RegisterUserDTO {
   name: string;
@@ -21,7 +21,7 @@ export class RegisterUserUseCase implements UseCase<RegisterUserDTO, RegisterUse
 
   async execute(request: RegisterUserDTO): Promise<RegisterUserResponse> {
     if (!request.name) {
-      return Result.fail(new ValidationError("Name is required."));
+      return Result.fail(new ValidationError('Name is required.'));
     }
 
     const emailOrError = Email.create(request.email);
@@ -58,6 +58,7 @@ export class RegisterUserUseCase implements UseCase<RegisterUserDTO, RegisterUse
     const user = userOrError.getValue();
 
     await this.userRepository.save(user);
+    console.log('Sending confirmation email to', email.value);
     await this.emailService.sendConfirmationEmail(email.value);
 
     return Result.ok<User>(user);
